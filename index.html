@@ -117,7 +117,7 @@ body {
 .music-btn {
   position: fixed;
   bottom: 30px; right: 30px;
-  width: 55px; height: 55px;
+  width: 60px; height: 60px;
   background: var(--gold);
   border: none; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
@@ -126,6 +126,12 @@ body {
   box-shadow: 0 0 25px rgba(201,168,76,0.5);
   transition: transform 0.3s, box-shadow 0.3s;
   animation: musicPulse 2s ease-in-out infinite;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  /* Larger tap area for iOS */
+  padding: 0;
+  outline: none;
+  -webkit-appearance: none;
 }
 .music-btn:hover { transform: scale(1.1); box-shadow: 0 0 40px rgba(201,168,76,0.8); }
 @keyframes musicPulse {
@@ -1082,8 +1088,8 @@ footer {
   <svg class="pause-icon" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
 </button>
 
-<!-- Background Music: Using multiple source strategies for Google Drive -->
-<audio id="bgMusic" loop crossorigin="anonymous" preload="none">
+<!-- Background Music — iOS Safari compatible -->
+<audio id="bgMusic" playsinline preload="none" webkit-playsinline x-webkit-airplay="allow">
   <source src="https://raw.githubusercontent.com/auramediawork/armankalpanaringceremony/main/music.mp3" type="audio/mpeg">
 </audio>
 
@@ -1584,27 +1590,96 @@ function animateParticles() {
 animateParticles();
 
 // ================================
-// MUSIC PLAYER — GitHub Raw URL
+// MUSIC PLAYER — iOS Safari Compatible
 // ================================
 const musicBtn = document.getElementById('musicBtn');
 const bgMusic = document.getElementById('bgMusic');
+const MUSIC_SRC = 'https://raw.githubusercontent.com/auramediawork/armankalpanaringceremony/main/music.mp3';
+
+let audioUnlocked = false;
+let audioCtx = null;
+
+// iOS requires AudioContext to be created & resumed inside a user gesture
+function unlockAudioContext() {
+  if (audioUnlocked) return;
+  try {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    // Create a silent buffer and play it to unlock
+    const buf = audioCtx.createBuffer(1, 1, 22050);
+    const src = audioCtx.createBufferSource();
+    src.buffer = buf;
+    src.connect(audioCtx.destination);
+    src.start(0);
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+    audioUnlocked = true;
+  } catch(e) {}
+}
+
+// Set src explicitly (some iOS versions need this set before gesture)
+bgMusic.src = MUSIC_SRC;
+bgMusic.load();
+
+function playMusic() {
+  unlockAudioContext();
+
+  // iOS Safari needs volume set explicitly
+  bgMusic.volume = 1.0;
+  bgMusic.muted = false;
+
+  const playPromise = bgMusic.play();
+  if (playPromise !== undefined) {
+    playPromise
+      .then(() => {
+        musicBtn.classList.add('playing');
+      })
+      .catch((err) => {
+        // If blocked, try setting src again and replay
+        bgMusic.src = MUSIC_SRC;
+        bgMusic.load();
+        bgMusic.play()
+          .then(() => musicBtn.classList.add('playing'))
+          .catch(() => showToast('🔇 Tap the music button again!'));
+      });
+  }
+}
 
 musicBtn.addEventListener('click', () => {
-  if (!bgMusic.paused) {
+  if (!bgMusic.paused && !bgMusic.ended) {
     bgMusic.pause();
     musicBtn.classList.remove('playing');
   } else {
-    bgMusic.play()
-      .then(() => musicBtn.classList.add('playing'))
-      .catch(err => showToast('🔇 Tap again to play music!'));
+    playMusic();
   }
+}, { passive: false });
+
+// Also try to play on first ANY touch/click on page (helps on iOS)
+let firstInteraction = true;
+function handleFirstInteraction() {
+  if (!firstInteraction) return;
+  firstInteraction = false;
+  unlockAudioContext();
+  // Pre-load but don't autoplay (respects user intent)
+  bgMusic.load();
+  document.removeEventListener('touchstart', handleFirstInteraction);
+  document.removeEventListener('click', handleFirstInteraction);
+}
+document.addEventListener('touchstart', handleFirstInteraction, { passive: true });
+document.addEventListener('click', handleFirstInteraction, { passive: true });
+
+bgMusic.addEventListener('ended', () => {
+  // Loop manually for iOS (loop attribute sometimes ignored)
+  bgMusic.currentTime = 0;
+  bgMusic.play().catch(() => {});
 });
 
-bgMusic.addEventListener('ended', () => musicBtn.classList.remove('playing'));
+bgMusic.addEventListener('pause', () => musicBtn.classList.remove('playing'));
+bgMusic.addEventListener('play', () => musicBtn.classList.add('playing'));
 
-// Hint after loader
+// Show hint after loader disappears
 setTimeout(() => {
-  showToast('🎵 Tap the gold button to play music!', 4000);
+  showToast('🎵 Tap the gold button to play music!', 5000);
 }, 3500);
 
 // ================================

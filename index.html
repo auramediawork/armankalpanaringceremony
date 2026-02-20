@@ -1082,9 +1082,9 @@ footer {
   <svg class="pause-icon" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
 </button>
 
-<!-- Background Music (replace src with your audio URL) -->
-<audio id="bgMusic" loop>
-  <source src="https://drive.google.com/uc?export=download&id=1Hdcned3quAJ7bMiNrHi31ETxe0y9K0Ls" type="audio/mpeg">
+<!-- Background Music: Using multiple source strategies for Google Drive -->
+<audio id="bgMusic" loop crossorigin="anonymous" preload="none">
+  <source src="https://raw.githubusercontent.com/auramediawork/armankalpanaringceremony/main/music.mp3" type="audio/mpeg">
 </audio>
 
 <!-- Particles Canvas -->
@@ -1584,21 +1584,28 @@ function animateParticles() {
 animateParticles();
 
 // ================================
-// MUSIC PLAYER
+// MUSIC PLAYER — GitHub Raw URL
 // ================================
 const musicBtn = document.getElementById('musicBtn');
 const bgMusic = document.getElementById('bgMusic');
 
 musicBtn.addEventListener('click', () => {
-  if (bgMusic.paused) {
-    bgMusic.play().then(() => musicBtn.classList.add('playing')).catch(() => {
-      showToast('🎵 Music could not be loaded. Check the audio source.');
-    });
-  } else {
+  if (!bgMusic.paused) {
     bgMusic.pause();
     musicBtn.classList.remove('playing');
+  } else {
+    bgMusic.play()
+      .then(() => musicBtn.classList.add('playing'))
+      .catch(err => showToast('🔇 Tap again to play music!'));
   }
 });
+
+bgMusic.addEventListener('ended', () => musicBtn.classList.remove('playing'));
+
+// Hint after loader
+setTimeout(() => {
+  showToast('🎵 Tap the gold button to play music!', 4000);
+}, 3500);
 
 // ================================
 // SCROLL REVEAL

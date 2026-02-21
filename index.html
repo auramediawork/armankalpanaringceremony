@@ -6,7 +6,7 @@
 <title id="page-title">Ring Ceremony Invitation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Great+Vibes&family=Noto+Serif+Devanagari:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Niconne&family=Noto+Serif+Devanagari:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
 
 <style>
 /* ===========================
@@ -25,9 +25,10 @@
   --dark-mid: #3E0039;
   --text-dark: #2C1A00;
   --text-light: #FDF6E3;
-  --font-display: 'Great Vibes', cursive;
+  --font-display: 'Niconne', cursive;
   --font-heading: 'Cormorant Garamond', serif;
   --font-body: 'Playfair Display', serif;
+  --font-number: 'Lato', sans-serif;
   --font-devanagari: 'Noto Serif Devanagari', serif;
 }
 
@@ -282,12 +283,13 @@ body {
   text-align: center;
 }
 .hero-date-item .number {
-  font-family: var(--font-heading);
-  font-size: clamp(2.5rem, 6vw, 4rem);
-  font-weight: 600;
+  font-family: var(--font-number);
+  font-size: clamp(2.2rem, 6vw, 3.8rem);
+  font-weight: 700;
   color: var(--gold);
   line-height: 1;
   display: block;
+  letter-spacing: 1px;
 }
 .hero-date-item .label {
   font-family: var(--font-body);
@@ -1178,22 +1180,18 @@ footer {
     <div class="hero-date-row" id="hero-date">
       <div class="hero-date-item">
         <span class="number">11</span>
-        <span class="label">Day</span>
       </div>
       <div class="date-separator"></div>
       <div class="hero-date-item">
         <span class="number">March</span>
-        <span class="label">Month</span>
       </div>
       <div class="date-separator"></div>
       <div class="hero-date-item">
         <span class="number">2026</span>
-        <span class="label">Year</span>
       </div>
       <div class="date-separator"></div>
       <div class="hero-date-item">
         <span class="number">Wednesday</span>
-        <span class="label">Day</span>
       </div>
     </div>
   </div>
@@ -1229,7 +1227,7 @@ footer {
         <div class="person-title" id="groom-title">Groom-to-Be</div>
         <div class="person-parents" id="groom-parents">
           Son of<br>
-          <strong>Mr. Satyabrata Mallick</strong> &amp; <strong>Mrs. Mamata Rani Mallick</strong><br>
+          <strong>Mrs. Mamata Rani Mallick</strong> &amp; <strong>Mr. Satyabrata Mallick</strong><br>
           <em>Bhadrak, Odisha</em>
         </div>
       </div>
@@ -1252,7 +1250,7 @@ footer {
         <div class="person-title" id="bride-title">Bride-to-Be</div>
         <div class="person-parents" id="bride-parents">
           Daughter of<br>
-          <strong>Mr. Bijay Dash</strong> &amp; <strong>Mrs. Mamata Dash</strong><br>
+          <strong>Mrs. Mamata Dash</strong><br>
           <em>Bhubaneswar, Odisha</em>
         </div>
       </div>
@@ -1283,7 +1281,7 @@ footer {
       <div class="detail-card reveal">
         <span class="detail-icon">⏰</span>
         <span class="detail-label">Time</span>
-        <div class="detail-value" id="event-time">11:00 AM Onwards</div>
+        <div class="detail-value" id="event-time">10:00 AM Onwards</div>
       </div>
 
       <div class="detail-card reveal">
@@ -1373,42 +1371,49 @@ footer {
     <div class="section-heading reveal">
       <span class="tag">Kindly Respond</span>
       <h2>RSVP</h2>
-      <p>Let us know you'll be joining the celebration</p>
+      <p>We'd love to know if you're joining us</p>
     </div>
 
     <div class="rsvp-box reveal">
-      <h3>You are Coming naa? 🎉</h3>
+      <h3>Your presence would make our day complete. 💍</h3>
       <form id="rsvp-form" action="https://formsubmit.co/armankalpanatogether@gmail.com" method="POST">
         <input type="hidden" name="_subject" value="RSVP for Arman & Kalpana Ring Ceremony 💍">
         <input type="hidden" name="_captcha" value="false">
         <input type="hidden" name="_template" value="table">
+
         <div class="form-group">
-          <label>Your Name *</label>
-          <input type="text" name="name" id="rsvp-name" placeholder="Enter your full name" required>
+          <label>Your Name(s) *</label>
+          <input type="text" name="name" id="rsvp-name" placeholder="Who's joining the celebration?" required>
         </div>
+
         <div class="form-group">
-          <label>Attendance *</label>
+          <label>The Plan *</label>
           <select name="attendance" id="rsvp-attendance" required>
-            <option value="">Select...</option>
-            <option value="Yes, I will be there! 🎊">Yes, I will be there! 🎊</option>
-            <option value="Maybe, I'll try to attend">Maybe, I'll try to attend</option>
-            <option value="Sorry, I can't make it">Sorry, I can't make it</option>
+            <option value="">Let us know...</option>
+            <option value="Yes — We'll be there to celebrate with you!">✅ Yes — We'll be there to celebrate with you!</option>
+            <option value="Maybe — We're hoping to make it happen">🤞 Maybe — We're hoping to make it happen</option>
+            <option value="No — Sadly we can't join, but sending our best">💛 No — Sadly we can't join, but sending our best</option>
           </select>
         </div>
+
         <div class="form-group">
-          <label>Number of Guests</label>
+          <label>The Family</label>
           <select name="guests" id="rsvp-guests">
-            <option value="Just me">Just me</option>
-            <option value="2 people">2 people</option>
-            <option value="3 people">3 people</option>
-            <option value="4+ people">4+ people</option>
+            <option value="Just 1 smile">Just 1 smile 😊</option>
+            <option value="2 smiles">2 smiles 😊😊</option>
+            <option value="3 smiles">3 smiles 😊😊😊</option>
+            <option value="4 smiles">4 smiles 😊😊😊😊</option>
+            <option value="5+ smiles">5+ smiles 🎉</option>
           </select>
+          <span style="font-family:var(--font-heading);font-size:0.8rem;color:var(--gold);opacity:0.7;margin-top:6px;display:block;font-style:italic;">Total number of smiles joining us?</span>
         </div>
+
         <div class="form-group">
-          <label>You wanna something to say?</label>
-          <textarea name="message" id="rsvp-message" placeholder="Share your wishes or any message..."></textarea>
+          <label>A little note for the bride and groom...</label>
+          <textarea name="message" id="rsvp-message" placeholder="Share your wishes, blessings, or just say hello 🌸"></textarea>
         </div>
-        <button type="submit" class="rsvp-btn">💌 Send RSVP</button>
+
+        <button type="submit" class="rsvp-btn">💌 Send with Love</button>
       </form>
     </div>
   </div>
@@ -1449,12 +1454,12 @@ const CONFIG = {
   brideFullName: "Kalpana Dash",
   
   // Date (YYYY, MM-1, DD) — JS months are 0-indexed
-  eventDate: new Date(2026, 2, 11, 11, 0, 0), // March 11, 2026 at 11 AM
+  eventDate: new Date(2026, 2, 11, 10, 0, 0), // March 11, 2026 at 10 AM
   
   // Event details
   eventTitle: "Ring Ceremony",
   eventDateDisplay: "Wednesday, 11th March 2026",
-  eventTime: "11:00 AM Onwards",
+  eventTime: "10:00 AM Onwards",
   
   // Venue
   venueName: "Jagannath Temple",
